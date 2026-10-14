@@ -11,20 +11,51 @@
       "name": "debug",
       "inherits": "base",
       "displayName": "Debug",
-      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
     },
     {
       "name": "release",
       "inherits": "base",
       "displayName": "Release",
-      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release", "AS3LSP_BUILD_TESTS": "OFF" }
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "AS3LSP_BUILD_TESTS": "OFF"
+      }
+    },
+    {
+      "name": "windows-x64-release",
+      "inherits": "base",
+      "displayName": "Release for Windows x64 (MinGW-w64 cross compiler)",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/mingw-w64-x86_64.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "AS3LSP_BUILD_TESTS": "OFF"
+      }
     }
   ],
   "buildPresets": [
-    { "name": "debug", "configurePreset": "debug" },
-    { "name": "release", "configurePreset": "release" }
+    {
+      "name": "debug",
+      "configurePreset": "debug"
+    },
+    {
+      "name": "release",
+      "configurePreset": "release"
+    },
+    {
+      "name": "windows-x64-release",
+      "configurePreset": "windows-x64-release"
+    }
   ],
   "testPresets": [
-    { "name": "debug", "configurePreset": "debug", "output": { "outputOnFailure": true } }
+    {
+      "name": "debug",
+      "configurePreset": "debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
   ]
 }

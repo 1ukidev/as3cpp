@@ -211,7 +211,8 @@
     "watch": "node scripts/build.mjs --watch",
     "typecheck": "tsc --noEmit",
     "vscode:prepublish": "node scripts/build.mjs --production",
-    "package": "node scripts/build-server.mjs && vsce package --no-dependencies --skip-license --allow-missing-repository"
+    "package": "node scripts/package.mjs",
+    "package:win32-x64": "node scripts/package.mjs --target win32-x64"
   },
   "dependencies": {
     "vscode-languageclient": "^10.1.2"

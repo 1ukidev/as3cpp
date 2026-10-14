@@ -82,7 +82,7 @@ struct Symbol {
     const model::Member* member = nullptr;
     const model::Global* global = nullptr;
     const model::Local* local = nullptr;
-    std::string package;
+    std::string package{};
 };
 
 // The static type information of an expression.
@@ -91,7 +91,7 @@ struct Value {
 
     Kind kind = Kind::Unknown;
     TypeRef type;
-    std::string package;
+    std::string package{};
     // Return type of a function value, as written in `context`.
     std::string returnType;
     const model::Unit* context = nullptr;

@@ -46,7 +46,7 @@ target_link_libraries(as3lsp PRIVATE as3core)
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     target_link_options(as3lsp PRIVATE -static-libstdc++ -static-libgcc)
 elseif(MINGW)
-    target_link_options(as3lsp PRIVATE -static)
+    target_link_options(as3lsp PRIVATE -static $<$<CONFIG:Release>:-s>)
 endif()
 
 if(AS3LSP_BUILD_TESTS)
