@@ -1,0 +1,21 @@
+# Build
+build/
+vscode-build/
+.cache/
+compile_commands.json
+
+# Extension
+node_modules/
+extension/dist/
+extension/server/
+.vscode-test/
+*.vsix
+
+# Editors and operating systems
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

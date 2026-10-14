@@ -1,0 +1,8 @@
+**
+!dist/extension.js
+!server/**
+!syntaxes/**
+!language-configuration.json
+!mxml-language-configuration.json
+!package.json
+!README.md

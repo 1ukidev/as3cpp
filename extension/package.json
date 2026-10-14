@@ -1,0 +1,226 @@
+{
+  "name": "as3cpp",
+  "displayName": "ActionScript 3 (as3cpp)",
+  "description": "Fast ActionScript 3 language support backed by a native C++ language server",
+  "version": "0.1.0",
+  "publisher": "as3cpp",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "vscode": "^1.91.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "ActionScript",
+    "AS3",
+    "Flash",
+    "AIR",
+    "Flex"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "workspaceContains:**/*.as",
+    "workspaceContains:**/*.mxml",
+    "workspaceContains:**/asconfig*.json"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "actionscript",
+        "aliases": [
+          "ActionScript",
+          "AS3",
+          "as3"
+        ],
+        "extensions": [
+          ".as"
+        ],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "mxml",
+        "aliases": [
+          "MXML",
+          "mxml"
+        ],
+        "extensions": [
+          ".mxml"
+        ],
+        "configuration": "./mxml-language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "actionscript",
+        "scopeName": "source.actionscript.3",
+        "path": "./syntaxes/actionscript.tmLanguage.json"
+      },
+      {
+        "language": "mxml",
+        "scopeName": "text.mxml",
+        "path": "./syntaxes/mxml.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.actionscript": "actionscript",
+          "meta.embedded.inline.actionscript": "actionscript",
+          "meta.embedded.block.css": "css"
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "as3cpp.restartServer",
+        "title": "Restart Language Server",
+        "category": "ActionScript"
+      },
+      {
+        "command": "as3cpp.compileModule",
+        "title": "Compile Module",
+        "category": "ActionScript"
+      }
+    ],
+    "configuration": {
+      "title": "ActionScript 3 (as3cpp)",
+      "properties": {
+        "as3cpp.sdkPath": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Path to an Adobe AIR, Apache Flex or Apache Royale SDK. When empty, the extension uses `as3mxml.sdk.framework`, then the `AIR_HOME`, `FLEX_HOME` or `ROYALE_HOME` environment variable."
+        },
+        "as3cpp.sourcePaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "markdownDescription": "Extra directories with `.as` files to index. Relative paths start at the first workspace folder. Source paths from `asconfig.json` are read automatically."
+        },
+        "as3cpp.libraryPaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "markdownDescription": "Extra `.swc` files, or directories that contain `.swc` files. Library paths from `asconfig.json` are read automatically."
+        },
+        "as3cpp.frameworkLibraries": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Index the SWC files of the Flex framework (`frameworks/libs` of the SDK with the Flex compiler). They are indexed automatically when the workspace has MXML files."
+        },
+        "as3cpp.compiler.sdkPath": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Path to an SDK with the Flex compiler (`lib/mxmlc.jar`), such as Apache Flex. When empty, the extension uses the first SDK with the compiler among `as3cpp.sdkPath`, `as3mxml.sdk.framework`, `AIR_HOME`, `FLEX_HOME` and `ROYALE_HOME`."
+        },
+        "as3cpp.compiler.javaPath": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Path to the Java executable that runs the compiler. When empty, the compiler uses `JAVA_HOME`, then `java` on the `PATH`."
+        },
+        "as3cpp.compiler.jvmArgs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "markdownDescription": "Extra arguments for the Java virtual machine that runs the compiler, such as `-Xmx1024m`."
+        },
+        "as3cpp.server.path": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Path to a custom `as3lsp` executable. When empty, the extension uses the bundled executable."
+        },
+        "as3cpp.trace.server": {
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "markdownDescription": "Logs the communication between VS Code and the language server."
+        }
+      }
+    },
+    "taskDefinitions": [
+      {
+        "type": "as3cpp",
+        "required": [
+          "asconfig"
+        ],
+        "properties": {
+          "asconfig": {
+            "type": "string",
+            "description": "Path of the asconfig.json file, relative to the workspace folder."
+          },
+          "debug": {
+            "type": "boolean",
+            "description": "Compiles a debug build when true, and a release build when false."
+          },
+          "clean": {
+            "type": "boolean",
+            "description": "Deletes the contents of the output directory instead of compiling."
+          }
+        }
+      }
+    ],
+    "problemMatchers": [
+      {
+        "name": "as3cpp-error",
+        "label": "ActionScript compiler errors",
+        "owner": "as3cpp",
+        "source": "mxmlc",
+        "applyTo": "allDocuments",
+        "fileLocation": [
+          "absolute"
+        ],
+        "severity": "error",
+        "pattern": {
+          "regexp": "^(.+)\\((\\d+)\\):\\s+(?:col:\\s+(\\d+)\\s+)?(?:Error|Erro|Fehler|Erreur|Errore):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        }
+      },
+      {
+        "name": "as3cpp-warning",
+        "label": "ActionScript compiler warnings",
+        "owner": "as3cpp",
+        "source": "mxmlc",
+        "applyTo": "allDocuments",
+        "fileLocation": [
+          "absolute"
+        ],
+        "severity": "warning",
+        "pattern": {
+          "regexp": "^(.+)\\((\\d+)\\):\\s+(?:col:\\s+(\\d+)\\s+)?(?:Warning|Aviso|Warnung|Avertissement|Avvertenza|Advertencia):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:server": "node scripts/build-server.mjs",
+    "watch": "node scripts/build.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "vscode:prepublish": "node scripts/build.mjs --production",
+    "package": "node scripts/build-server.mjs && vsce package --no-dependencies --skip-license --allow-missing-repository"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^10.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "1.91.0",
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  }
+}

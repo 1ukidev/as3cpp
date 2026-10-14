@@ -1,0 +1,602 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "ActionScript 3",
+  "scopeName": "source.actionscript.3",
+  "fileTypes": [
+    "as"
+  ],
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#regexp"
+    },
+    {
+      "include": "#metadata"
+    },
+    {
+      "include": "#package"
+    },
+    {
+      "include": "#import"
+    },
+    {
+      "include": "#type-declaration"
+    },
+    {
+      "include": "#function-declaration"
+    },
+    {
+      "include": "#variable-declaration"
+    },
+    {
+      "include": "#namespace"
+    },
+    {
+      "include": "#config-condition"
+    },
+    {
+      "include": "#type-annotation"
+    },
+    {
+      "include": "#type-operators"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#builtin-types"
+    },
+    {
+      "include": "#function-call"
+    },
+    {
+      "include": "#identifiers"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#punctuation"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.documentation.actionscript.3",
+          "begin": "/\\*\\*(?!/)",
+          "end": "\\*/",
+          "captures": {
+            "0": {
+              "name": "punctuation.definition.comment.actionscript.3"
+            }
+          },
+          "patterns": [
+            {
+              "match": "(@param)\\s+([A-Za-z_$][\\w$]*)",
+              "captures": {
+                "1": {
+                  "name": "storage.type.class.asdoc.actionscript.3"
+                },
+                "2": {
+                  "name": "variable.parameter.asdoc.actionscript.3"
+                }
+              }
+            },
+            {
+              "match": "@\\w+",
+              "name": "storage.type.class.asdoc.actionscript.3"
+            },
+            {
+              "match": "</?[a-zA-Z]+[^>]*>",
+              "name": "markup.raw.html.asdoc.actionscript.3"
+            }
+          ]
+        },
+        {
+          "name": "comment.block.actionscript.3",
+          "begin": "/\\*",
+          "end": "\\*/",
+          "captures": {
+            "0": {
+              "name": "punctuation.definition.comment.actionscript.3"
+            }
+          }
+        },
+        {
+          "name": "comment.line.double-slash.actionscript.3",
+          "begin": "//",
+          "end": "$",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.actionscript.3"
+            }
+          }
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.actionscript.3",
+          "begin": "\"",
+          "end": "\\\"|$",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.actionscript.3"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.actionscript.3"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#string-escapes"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.actionscript.3",
+          "begin": "'",
+          "end": "'|$",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.actionscript.3"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.actionscript.3"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#string-escapes"
+            }
+          ]
+        }
+      ]
+    },
+    "string-escapes": {
+      "match": "\\\\(?:x\\h{2}|u\\h{4}|.)",
+      "name": "constant.character.escape.actionscript.3"
+    },
+    "regexp": {
+      "name": "string.regexp.actionscript.3",
+      "begin": "(?<=[=(,:\\[!&|?{};]|\\breturn|^)\\s*(/)(?![/*+?])(?=(?:[^/\\\\\\[\\n]|\\\\.|\\[(?:[^\\]\\\\\\n]|\\\\.)*\\])+/[gimsx]*)",
+      "end": "(/)([gimsx]*)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.string.begin.actionscript.3"
+        }
+      },
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.string.end.actionscript.3"
+        },
+        "2": {
+          "name": "keyword.other.actionscript.3"
+        }
+      },
+      "patterns": [
+        {
+          "match": "\\\\.",
+          "name": "constant.character.escape.actionscript.3"
+        },
+        {
+          "begin": "\\[",
+          "end": "\\]",
+          "name": "constant.other.character-class.set.regexp",
+          "patterns": [
+            {
+              "match": "\\\\.",
+              "name": "constant.character.escape.actionscript.3"
+            }
+          ]
+        }
+      ]
+    },
+    "metadata": {
+      "name": "meta.metadata.actionscript.3",
+      "begin": "^\\s*(\\[)\\s*([A-Za-z_$][\\w$]*)",
+      "end": "\\]",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.metadata.begin.actionscript.3"
+        },
+        "2": {
+          "name": "storage.type.annotation.actionscript.3"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.metadata.end.actionscript.3"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#strings"
+        },
+        {
+          "match": "([A-Za-z_$][\\w$]*)\\s*(=)",
+          "captures": {
+            "1": {
+              "name": "variable.parameter.metadata.actionscript.3"
+            },
+            "2": {
+              "name": "keyword.operator.assignment.actionscript.3"
+            }
+          }
+        },
+        {
+          "include": "#constants"
+        },
+        {
+          "include": "#numbers"
+        }
+      ]
+    },
+    "package": {
+      "match": "\\b(package)\\b(?:\\s+([\\w$.]+))?",
+      "captures": {
+        "1": {
+          "name": "storage.type.package.actionscript.3"
+        },
+        "2": {
+          "name": "entity.name.type.package.actionscript.3"
+        }
+      }
+    },
+    "import": {
+      "patterns": [
+        {
+          "match": "\\b(import)\\s+([\\w$.]+(?:\\.\\*)?)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.import.actionscript.3"
+            },
+            "2": {
+              "name": "entity.name.type.import.actionscript.3"
+            }
+          }
+        },
+        {
+          "match": "\\b(include)\\b",
+          "name": "keyword.control.import.actionscript.3"
+        }
+      ]
+    },
+    "type-declaration": {
+      "patterns": [
+        {
+          "match": "\\b(class|interface)\\s+([A-Za-z_$][\\w$]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.class.actionscript.3"
+            },
+            "2": {
+              "name": "entity.name.type.class.actionscript.3"
+            }
+          }
+        },
+        {
+          "begin": "\\b(extends|implements)\\b",
+          "end": "(?=\\{|\\bimplements\\b|$)",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.modifier.extends.actionscript.3"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "match": "[\\w$.]+",
+              "name": "entity.other.inherited-class.actionscript.3"
+            },
+            {
+              "match": ",",
+              "name": "punctuation.separator.comma.actionscript.3"
+            }
+          ]
+        }
+      ]
+    },
+    "function-declaration": {
+      "patterns": [
+        {
+          "match": "\\b(function)\\s+(get|set)\\s+([A-Za-z_$][\\w$]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.function.actionscript.3"
+            },
+            "2": {
+              "name": "storage.type.accessor.actionscript.3"
+            },
+            "3": {
+              "name": "entity.name.function.actionscript.3"
+            }
+          }
+        },
+        {
+          "match": "\\b(function)\\s+([A-Za-z_$][\\w$]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.function.actionscript.3"
+            },
+            "2": {
+              "name": "entity.name.function.actionscript.3"
+            }
+          }
+        },
+        {
+          "match": "\\bfunction\\b",
+          "name": "storage.type.function.actionscript.3"
+        },
+        {
+          "match": "(\\.\\.\\.)([A-Za-z_$][\\w$]*)",
+          "captures": {
+            "1": {
+              "name": "keyword.operator.rest.actionscript.3"
+            },
+            "2": {
+              "name": "variable.parameter.actionscript.3"
+            }
+          }
+        }
+      ]
+    },
+    "variable-declaration": {
+      "patterns": [
+        {
+          "match": "\\b(const)\\s+([A-Za-z_$][\\w$]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.const.actionscript.3"
+            },
+            "2": {
+              "name": "variable.other.constant.actionscript.3"
+            }
+          }
+        },
+        {
+          "match": "\\b(var)\\s+([A-Za-z_$][\\w$]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.var.actionscript.3"
+            },
+            "2": {
+              "name": "variable.other.readwrite.actionscript.3"
+            }
+          }
+        }
+      ]
+    },
+    "namespace": {
+      "patterns": [
+        {
+          "match": "\\b(use)\\s+(namespace)\\s+([A-Za-z_$][\\w$]*)",
+          "captures": {
+            "1": {
+              "name": "keyword.other.use.actionscript.3"
+            },
+            "2": {
+              "name": "storage.type.namespace.actionscript.3"
+            },
+            "3": {
+              "name": "entity.name.namespace.actionscript.3"
+            }
+          }
+        },
+        {
+          "match": "\\b(namespace)\\s+([A-Za-z_$][\\w$]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.namespace.actionscript.3"
+            },
+            "2": {
+              "name": "entity.name.namespace.actionscript.3"
+            }
+          }
+        }
+      ]
+    },
+    "config-condition": {
+      "match": "\\b([A-Za-z_$][\\w$]*)(::)([A-Za-z_$][\\w$]*)",
+      "captures": {
+        "1": {
+          "name": "entity.name.namespace.actionscript.3"
+        },
+        "2": {
+          "name": "punctuation.separator.namespace.actionscript.3"
+        },
+        "3": {
+          "name": "variable.other.constant.actionscript.3"
+        }
+      }
+    },
+    "type-annotation": {
+      "match": "(?<=[\\w$)\\]])(:)\\s*((?:\\*|void|[A-Za-z_$][\\w$]*(?:\\.[A-Za-z_$][\\w$]*)*(?:\\.<[\\w$.<>*\\s]*>)?))",
+      "captures": {
+        "1": {
+          "name": "punctuation.separator.type.actionscript.3"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#type-name"
+            }
+          ]
+        }
+      }
+    },
+    "type-operators": {
+      "match": "\\b(new|as|is|instanceof)\\s+((?:\\*|void|[A-Za-z_$][\\w$]*(?:\\.[A-Za-z_$][\\w$]*)*(?:\\.<[\\w$.<>*\\s]*>)?))(?=\\s*[(;,)\\]\\s]|$)",
+      "captures": {
+        "1": {
+          "name": "keyword.operator.expression.actionscript.3"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#type-name"
+            }
+          ]
+        }
+      }
+    },
+    "type-name": {
+      "patterns": [
+        {
+          "match": "\\*|\\bvoid\\b",
+          "name": "support.type.builtin.actionscript.3"
+        },
+        {
+          "include": "#builtin-types"
+        },
+        {
+          "match": "\\.<|>",
+          "name": "punctuation.definition.typeparameters.actionscript.3"
+        },
+        {
+          "match": "[A-Za-z_$][\\w$]*",
+          "name": "entity.name.type.actionscript.3"
+        },
+        {
+          "match": "\\.",
+          "name": "punctuation.accessor.actionscript.3"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "match": "\\b(public|private|protected|internal|static|override|final|dynamic|native)\\b",
+          "name": "storage.modifier.actionscript.3"
+        },
+        {
+          "match": "\\b(if|else|for|each|while|do|switch|case|default|break|continue|return|throw|try|catch|finally|with)\\b",
+          "name": "keyword.control.actionscript.3"
+        },
+        {
+          "match": "\\b(new|delete|typeof|void|instanceof|as|is|in)\\b",
+          "name": "keyword.operator.expression.actionscript.3"
+        },
+        {
+          "match": "\\b(this|super)\\b",
+          "name": "variable.language.actionscript.3"
+        }
+      ]
+    },
+    "constants": {
+      "match": "\\b(true|false|null|undefined|NaN|Infinity)\\b",
+      "name": "constant.language.actionscript.3"
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "match": "\\b0[xX]\\h+\\b",
+          "name": "constant.numeric.hex.actionscript.3"
+        },
+        {
+          "match": "(?<![\\w$])(?:\\d+\\.?\\d*|\\.\\d+)(?:[eE][+-]?\\d+)?\\b",
+          "name": "constant.numeric.decimal.actionscript.3"
+        }
+      ]
+    },
+    "builtin-types": {
+      "match": "\\b(int|uint|Number|String|Boolean|Object|Array|Function|Class|Vector|XML|XMLList|RegExp|Date|Error|Namespace|QName)\\b",
+      "name": "support.type.builtin.actionscript.3"
+    },
+    "function-call": {
+      "match": "([A-Za-z_$][\\w$]*)(?=\\s*\\()",
+      "captures": {
+        "1": {
+          "name": "entity.name.function.call.actionscript.3"
+        }
+      }
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "match": "\\b[A-Z][A-Z0-9_]+\\b",
+          "name": "variable.other.constant.actionscript.3"
+        },
+        {
+          "match": "\\b[A-Z][\\w$]*\\b",
+          "name": "entity.name.type.actionscript.3"
+        },
+        {
+          "match": "(?<=\\.)[A-Za-z_$][\\w$]*",
+          "name": "variable.other.property.actionscript.3"
+        },
+        {
+          "match": "[A-Za-z_$][\\w$]*",
+          "name": "variable.other.readwrite.actionscript.3"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "match": "===|!==|==|!=|<=|>=",
+          "name": "keyword.operator.comparison.actionscript.3"
+        },
+        {
+          "match": "&&=|\\|\\|=|\\+=|-=|\\*=|/=|%=|&=|\\|=|\\^=|<<=|>>>=|>>=|=",
+          "name": "keyword.operator.assignment.actionscript.3"
+        },
+        {
+          "match": "&&|\\|\\||!",
+          "name": "keyword.operator.logical.actionscript.3"
+        },
+        {
+          "match": "\\+\\+|--|[-+*/%]",
+          "name": "keyword.operator.arithmetic.actionscript.3"
+        },
+        {
+          "match": "<<|>>>|>>|[&|^~]",
+          "name": "keyword.operator.bitwise.actionscript.3"
+        },
+        {
+          "match": "[<>]",
+          "name": "keyword.operator.relational.actionscript.3"
+        },
+        {
+          "match": "\\?|:",
+          "name": "keyword.operator.ternary.actionscript.3"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "match": ";",
+          "name": "punctuation.terminator.statement.actionscript.3"
+        },
+        {
+          "match": ",",
+          "name": "punctuation.separator.comma.actionscript.3"
+        },
+        {
+          "match": "\\.\\.\\.|\\.",
+          "name": "punctuation.accessor.actionscript.3"
+        }
+      ]
+    }
+  }
+}

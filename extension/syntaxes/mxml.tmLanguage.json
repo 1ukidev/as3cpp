@@ -1,0 +1,541 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "MXML",
+  "scopeName": "text.mxml",
+  "fileTypes": [
+    "mxml"
+  ],
+  "patterns": [
+    {
+      "include": "#declaration"
+    },
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#script"
+    },
+    {
+      "include": "#metadata"
+    },
+    {
+      "include": "#style"
+    },
+    {
+      "include": "#cdata"
+    },
+    {
+      "include": "#tag"
+    },
+    {
+      "include": "#entity"
+    }
+  ],
+  "repository": {
+    "declaration": {
+      "name": "meta.tag.preprocessor.xml.mxml",
+      "begin": "(<\\?)\\s*(xml)",
+      "end": "(\\?>)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.mxml"
+        },
+        "2": {
+          "name": "entity.name.tag.xml.mxml"
+        }
+      },
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.end.mxml"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#attribute"
+        }
+      ]
+    },
+    "comment": {
+      "name": "comment.block.mxml",
+      "begin": "<!--",
+      "end": "-->",
+      "captures": {
+        "0": {
+          "name": "punctuation.definition.comment.mxml"
+        }
+      }
+    },
+    "cdata": {
+      "name": "string.unquoted.cdata.mxml",
+      "begin": "<!\\[CDATA\\[",
+      "end": "\\]\\]>",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.cdata.begin.mxml"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.cdata.end.mxml"
+        }
+      }
+    },
+    "entity": {
+      "name": "constant.character.entity.mxml",
+      "match": "&(?:[A-Za-z]+|#\\d+|#x\\h+);"
+    },
+    "script": {
+      "begin": "(<)(?:([A-Za-z_][\\w.-]*)(:))?(Script)(?=[\\s/>])",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.mxml"
+        },
+        "2": {
+          "name": "entity.name.tag.namespace.mxml"
+        },
+        "3": {
+          "name": "punctuation.separator.namespace.mxml"
+        },
+        "4": {
+          "name": "entity.name.tag.localname.mxml"
+        }
+      },
+      "end": "(</)(?:([A-Za-z_][\\w.-]*)(:))?(Script)\\s*(>)|(?<=/>)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.mxml"
+        },
+        "2": {
+          "name": "entity.name.tag.namespace.mxml"
+        },
+        "3": {
+          "name": "punctuation.separator.namespace.mxml"
+        },
+        "4": {
+          "name": "entity.name.tag.localname.mxml"
+        },
+        "5": {
+          "name": "punctuation.definition.tag.end.mxml"
+        }
+      },
+      "name": "meta.tag.script.mxml",
+      "patterns": [
+        {
+          "begin": "\\G",
+          "end": "(/?>)",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.definition.tag.end.mxml"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#attribute"
+            }
+          ]
+        },
+        {
+          "begin": "(?<=[^/]>)",
+          "end": "(?=</(?:[A-Za-z_][\\w.-]*:)?Script\\s*>)",
+          "contentName": "meta.embedded.block.actionscript",
+          "patterns": [
+            {
+              "begin": "<!\\[CDATA\\[",
+              "end": "\\]\\]>",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.cdata.begin.mxml"
+                }
+              },
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.cdata.end.mxml"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "source.actionscript.3"
+                }
+              ]
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "source.actionscript.3"
+            }
+          ]
+        }
+      ]
+    },
+    "metadata": {
+      "begin": "(<)(?:([A-Za-z_][\\w.-]*)(:))?(Metadata)(?=[\\s/>])",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.mxml"
+        },
+        "2": {
+          "name": "entity.name.tag.namespace.mxml"
+        },
+        "3": {
+          "name": "punctuation.separator.namespace.mxml"
+        },
+        "4": {
+          "name": "entity.name.tag.localname.mxml"
+        }
+      },
+      "end": "(</)(?:([A-Za-z_][\\w.-]*)(:))?(Metadata)\\s*(>)|(?<=/>)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.mxml"
+        },
+        "2": {
+          "name": "entity.name.tag.namespace.mxml"
+        },
+        "3": {
+          "name": "punctuation.separator.namespace.mxml"
+        },
+        "4": {
+          "name": "entity.name.tag.localname.mxml"
+        },
+        "5": {
+          "name": "punctuation.definition.tag.end.mxml"
+        }
+      },
+      "name": "meta.tag.metadata.mxml",
+      "patterns": [
+        {
+          "begin": "\\G",
+          "end": "(/?>)",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.definition.tag.end.mxml"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#attribute"
+            }
+          ]
+        },
+        {
+          "begin": "(?<=[^/]>)",
+          "end": "(?=</(?:[A-Za-z_][\\w.-]*:)?Metadata\\s*>)",
+          "contentName": "meta.embedded.block.actionscript",
+          "patterns": [
+            {
+              "begin": "<!\\[CDATA\\[",
+              "end": "\\]\\]>",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.cdata.begin.mxml"
+                }
+              },
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.cdata.end.mxml"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "source.actionscript.3"
+                }
+              ]
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "source.actionscript.3"
+            }
+          ]
+        }
+      ]
+    },
+    "style": {
+      "begin": "(<)(?:([A-Za-z_][\\w.-]*)(:))?(Style)(?=[\\s/>])",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.mxml"
+        },
+        "2": {
+          "name": "entity.name.tag.namespace.mxml"
+        },
+        "3": {
+          "name": "punctuation.separator.namespace.mxml"
+        },
+        "4": {
+          "name": "entity.name.tag.localname.mxml"
+        }
+      },
+      "end": "(</)(?:([A-Za-z_][\\w.-]*)(:))?(Style)\\s*(>)|(?<=/>)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.mxml"
+        },
+        "2": {
+          "name": "entity.name.tag.namespace.mxml"
+        },
+        "3": {
+          "name": "punctuation.separator.namespace.mxml"
+        },
+        "4": {
+          "name": "entity.name.tag.localname.mxml"
+        },
+        "5": {
+          "name": "punctuation.definition.tag.end.mxml"
+        }
+      },
+      "name": "meta.tag.style.mxml",
+      "patterns": [
+        {
+          "begin": "\\G",
+          "end": "(/?>)",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.definition.tag.end.mxml"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#attribute"
+            }
+          ]
+        },
+        {
+          "begin": "(?<=[^/]>)",
+          "end": "(?=</(?:[A-Za-z_][\\w.-]*:)?Style\\s*>)",
+          "contentName": "meta.embedded.block.css",
+          "patterns": [
+            {
+              "begin": "<!\\[CDATA\\[",
+              "end": "\\]\\]>",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.cdata.begin.mxml"
+                }
+              },
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.cdata.end.mxml"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "source.css"
+                }
+              ]
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "source.css"
+            }
+          ]
+        }
+      ]
+    },
+    "tag": {
+      "name": "meta.tag.mxml",
+      "begin": "(</?)(?:([A-Za-z_][\\w.-]*)(:))?([A-Za-z_][\\w.-]*)",
+      "end": "(/?>)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.mxml"
+        },
+        "2": {
+          "name": "entity.name.tag.namespace.mxml"
+        },
+        "3": {
+          "name": "punctuation.separator.namespace.mxml"
+        },
+        "4": {
+          "name": "entity.name.tag.localname.mxml"
+        }
+      },
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.end.mxml"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#attribute"
+        }
+      ]
+    },
+    "attribute": {
+      "patterns": [
+        {
+          "comment": "Event handlers and other values that start like code, such as click=\"save(event)\" or click=\"index = 0\". Text properties such as label stay plain text.",
+          "begin": "(?:([A-Za-z_][\\w.-]*)(:))?((?!(?:text|label|title|headerText|toolTip|prompt|htmlText|errorString|description|source|styleName|id)\\s*=)[A-Za-z_][\\w.-]*)\\s*(=)\\s*(?=([\\\"'])\\s*(?:[\\w$]+(?:\\.[\\w$]+)*(?:\\(|\\s*=(?!=)|\\+\\+|--)|(?:if|var|for|while|return|new|delete|this|super)\\b))",
+          "end": "(?<=[\\\"'])",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.other.attribute-name.namespace.mxml"
+            },
+            "2": {
+              "name": "punctuation.separator.namespace.mxml"
+            },
+            "3": {
+              "name": "entity.other.attribute-name.localname.mxml"
+            },
+            "4": {
+              "name": "punctuation.separator.key-value.mxml"
+            }
+          },
+          "patterns": [
+            {
+              "begin": "\"",
+              "end": "\"",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.begin.mxml"
+                }
+              },
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.end.mxml"
+                }
+              },
+              "contentName": "meta.embedded.inline.actionscript",
+              "patterns": [
+                {
+                  "include": "#entity"
+                },
+                {
+                  "include": "source.actionscript.3"
+                }
+              ]
+            },
+            {
+              "begin": "'",
+              "end": "'",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.begin.mxml"
+                }
+              },
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.end.mxml"
+                }
+              },
+              "contentName": "meta.embedded.inline.actionscript",
+              "patterns": [
+                {
+                  "include": "#entity"
+                },
+                {
+                  "include": "source.actionscript.3"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "begin": "(?:([A-Za-z_][\\w.-]*)(:))?([A-Za-z_][\\w.-]*)\\s*(=)\\s*(?=[\\\"'])",
+          "end": "(?<=[\\\"'])",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.other.attribute-name.namespace.mxml"
+            },
+            "2": {
+              "name": "punctuation.separator.namespace.mxml"
+            },
+            "3": {
+              "name": "entity.other.attribute-name.localname.mxml"
+            },
+            "4": {
+              "name": "punctuation.separator.key-value.mxml"
+            }
+          },
+          "patterns": [
+            {
+              "begin": "\"",
+              "end": "\"",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.begin.mxml"
+                }
+              },
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.end.mxml"
+                }
+              },
+              "name": "string.quoted.double.mxml",
+              "patterns": [
+                {
+                  "include": "#entity"
+                },
+                {
+                  "include": "#binding"
+                }
+              ]
+            },
+            {
+              "begin": "'",
+              "end": "'",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.begin.mxml"
+                }
+              },
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.end.mxml"
+                }
+              },
+              "name": "string.quoted.single.mxml",
+              "patterns": [
+                {
+                  "include": "#entity"
+                },
+                {
+                  "include": "#binding"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "match": "(?:([A-Za-z_][\\w.-]*)(:))?([A-Za-z_][\\w.-]*)",
+          "captures": {
+            "1": {
+              "name": "entity.other.attribute-name.namespace.mxml"
+            },
+            "2": {
+              "name": "punctuation.separator.namespace.mxml"
+            },
+            "3": {
+              "name": "entity.other.attribute-name.localname.mxml"
+            }
+          }
+        }
+      ]
+    },
+    "binding": {
+      "comment": "Data binding expressions, such as enabled=\"{model.enabled}\".",
+      "name": "meta.embedded.inline.actionscript",
+      "begin": "\\{",
+      "end": "\\}",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.begin.mxml"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.end.mxml"
+        }
+      },
+      "patterns": [
+        {
+          "include": "source.actionscript.3"
+        }
+      ]
+    }
+  }
+}
