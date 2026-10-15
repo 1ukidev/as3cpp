@@ -50,8 +50,19 @@ bool matchesPrefix(std::string_view name, std::string_view prefix) {
     return false;
 }
 
+bool isCompiled(const model::Unit* unit) {
+    return unit && unit->origin == model::Origin::Library;
+}
+
+// Compiled libraries contain names that the compiler generates, such as the classes
+// "_View_WatcherSetupUtil" of MXML bindings or the members "_init" of Object. Code never uses them.
+bool isGeneratedName(std::string_view name, const model::Unit* unit) {
+    return name.starts_with('_') && isCompiled(unit);
+}
+
 bool isHiddenType(const model::TypeDecl& type) {
-    return type.name.find('$') != std::string::npos || type.package.starts_with("__AS3__");
+    return type.name.find('$') != std::string::npos || type.package.starts_with("__AS3__") ||
+           isGeneratedName(type.name, type.unit);
 }
 
 CompletionKind memberKind(const model::Member& member) {
@@ -294,7 +305,8 @@ private:
 
     void addMembers(const model::TypeDecl& type, MemberScope scope) {
         for (const auto& ref : a_.resolver_.members(type, scope)) {
-            if (isAccessible(*ref.member, *ref.owner)) {
+            if (isAccessible(*ref.member, *ref.owner) &&
+                !isGeneratedName(ref.member->name, ref.owner->unit)) {
                 add(memberItem(*ref.member, model::displayType(ref.owner->name), '1'));
             }
         }
@@ -338,7 +350,8 @@ private:
             return;
         }
         a_.index_.forEachGlobal([&](const model::Global& global) {
-            if (global.package == package && global.decl.visibility == model::Visibility::Public) {
+            if (global.package == package && global.decl.visibility == model::Visibility::Public &&
+                !isGeneratedName(global.decl.name, global.unit)) {
                 add(memberItem(global.decl, global.package, '1'));
             }
         });
@@ -386,7 +399,8 @@ private:
             add(memberItem(global.decl, {}, '2'));
         }
         a_.index_.forEachGlobal([&](const model::Global& global) {
-            if (global.decl.visibility != model::Visibility::Public && global.package != a_.unit_.package) {
+            if ((global.decl.visibility != model::Visibility::Public && global.package != a_.unit_.package) ||
+                isGeneratedName(global.decl.name, global.unit)) {
                 return;
             }
             const bool visible = a_.resolver_.resolveGlobal(global.decl.name, &a_.unit_) == &global;

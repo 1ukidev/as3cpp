@@ -81,6 +81,14 @@ public:
         index_.add(std::move(unit));
     }
 
+    // A compiled library, which has no source location.
+    void addLibrary(const std::string& key, std::string_view text) {
+        auto unit = syntax::parse(text, {.collectScopes = false});
+        unit->key = key;
+        unit->origin = model::Origin::Library;
+        index_.add(std::move(unit));
+    }
+
     analysis::Analyzer open(std::string_view textWithCursor) {
         std::string text{textWithCursor};
         const auto marker = text.find(cursorMarker);
@@ -247,4 +255,25 @@ TEST_CASE(signatureHelpTracksActiveParameter) {
     CHECK(help.has_value());
     CHECK_EQ(help->signature.label, "distanceTo(other:Point):Number");
     CHECK_EQ(help->activeParameter, 0u);
+}
+
+TEST_CASE(completionHidesGeneratedLibraryNames) {
+    Fixture fixture;
+    fixture.addLibrary("library:generated.swc", R"(package {
+    public class _Main_WatcherSetupUtil {}
+    public class Library {
+        public static function _init():void {}
+        public function _internalHelper():void {}
+        public function load():void {}
+    }
+})");
+    auto items = labels(fixture.open(wrap("var library:Library;\nlibrary.@@")).completion(fixture.cursor()));
+    CHECK(contains(items, "load"));
+    CHECK(!contains(items, "_internalHelper"));
+
+    const std::string source = "package app {\n    public class Other {\n        private var _total:int;\n"
+                               "        public function run():void {\n            _@@\n        }\n    }\n}\n";
+    items = labels(fixture.open(source).completion(fixture.cursor()));
+    CHECK(contains(items, "_total"));
+    CHECK(!contains(items, "_Main_WatcherSetupUtil"));
 }
